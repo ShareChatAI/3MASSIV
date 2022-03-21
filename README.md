@@ -1,5 +1,7 @@
 # 3MASSIV
 
+3MASSIV is a human-annotated, multimodal and multilingual dataset containing short videos uploaded to a leading short-video social media platform - MOJ.
+
 ## DOWNLOAD INSTRUCTIONS
 
 3MASSIV dataset is available for non-commercial research purposes only. 
