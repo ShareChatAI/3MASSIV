@@ -12,3 +12,7 @@ Please ask your supervisor/advisor to sign the agreement appropriately and the
 [vikramgupta(at)sharechat(dot)co] and Prima [prima(dot)indic(at)gmail(dot)com]
 
 After verifying your request, we will contact you with the password to unzip the dataset.
+
+# Experiments
+
+For reproducing the results reported in the paper, please refer to the ```README.md``` and training scripts present in the ```code``` folder.
