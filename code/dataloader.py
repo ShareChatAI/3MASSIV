@@ -16,7 +16,7 @@ import glob
 
 class AvtDataLoader(Dataset):
     
-    def __init__(self, args, csv, split)
+    def __init__(self, args, csv, split):
         self.args = args
         print(f"Reading {csv}")
         self.csv = pd.read_csv(csv)
@@ -25,18 +25,18 @@ class AvtDataLoader(Dataset):
         self.post_ids = []
         self.video_feats_paths = args.video_location
         self.audio_feats_paths = args.audio_location
+        self.audio_feats_paths_second = args.audio_featloc_second
         self.mode = args.mode
         self.num_classes = args.num_classes
-        self.__load_label_mapping__(self.map_file_path)
         self.__update_data__()
     
     def __update_data__(self):
         for idx in tqdm(range(len(self.csv))):
             path_str = self.csv['concept'].iloc[idx]
             tgt_id = self.csv['concept_idx'].iloc[idx]
-            self.post_ids.append(self.csv['postid'].iloc[idx])
+            self.post_ids.append(self.csv['post_idx'].iloc[idx])
             self.target_ids.append(tgt_id)
-    
+
     def __len__(self):
         return len(self.post_ids)
 
@@ -114,7 +114,7 @@ class AvtDataLoader(Dataset):
             arr = aud.astype('double').reshape(-1)
         
         elif self.mode == "2as":
-            vgg_audio_feats_paths = self.args.audio_featloc_second
+            vgg_audio_feats_paths = self.audio_feats_paths_second
             aud_vgg = self.__get_audio_feats__(postId, vgg_audio_feats_paths)
             if aud_vgg is None:
                 return None

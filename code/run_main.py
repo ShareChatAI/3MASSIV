@@ -7,7 +7,7 @@ from argparse import ArgumentParser
 import numpy as np 
 from tqdm import tqdm
 from classifier import AvtDatamodule
-from tester import native_test
+from tester import massiv_test
 from torch.utils.data import DataLoader, random_split
 import pdb
 torch.set_default_tensor_type(torch.DoubleTensor)
@@ -49,9 +49,8 @@ if __name__ == '__main__':
     parser.add_argument('--test_file', type=str, default="")
     parser.add_argument('--val_file', type=str, default="")
     parser.add_argument('--map_file_location', type=str, default=None)
-    parser.add_argument('--batch_size', type=int, default=256)
+    parser.add_argument('--batch_size', type=int, default=1)
     parser.add_argument('--num_workers', type=int, default=30)
-    parser.add_argument('--max_epochs', type=int, default=500)
     parser.add_argument('--num_labels', type=int, default=34, help="number of concept categories")
     parser.add_argument('--video_location', type=str, default=None, help="path to the video features")
     parser.add_argument('--audio_location', type=str, default=None, help="path to the audio features")
