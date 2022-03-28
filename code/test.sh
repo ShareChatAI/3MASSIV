@@ -7,7 +7,7 @@ featloc="/mnt/disks/3massiv/resnext/"
 audio_featloc="/mnt/disks/3massiv/clsril/"
 audio_featloc_second="/mnt/disks/3massiv/vggish/feats/"
 phase="test"
-test_file_path="./data/3massiv_test.csv"
+test_file_path="../data/3massiv_test_dummy.csv"
 model_path="path-to-trained-model"
 
 CUDA_VISIBLE_DEVICES=0 python3 run_main.py --gpus -1 \
