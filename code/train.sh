@@ -7,8 +7,8 @@ featloc="/mnt/disks/3massiv/resnext/"
 audio_featloc="/mnt/disks/3massiv/clsril/"
 audio_featloc_second="/mnt/disks/3massiv/vggish/feats/"
 phase="train"
-train_file_path="./data/3massiv_train.csv"
-val_file_path="./data/3massiv_val.csv"
+train_file_path="../data/3massiv_train_dummy.csv"
+val_file_path="../data/3massiv_val_dummy.csv"
 
 CUDA_VISIBLE_DEVICES=0 python3 run_main.py --gpus -1 \
 	--train_file $train_file_path \
