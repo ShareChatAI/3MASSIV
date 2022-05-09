@@ -19,3 +19,16 @@ After verifying your request, we will contact you with the password to unzip the
 # Experiments
 
 For reproducing the results reported in the paper, please refer to the ```README.md``` and training scripts present in the ```code``` folder.
+
+# BibTeX Citation
+
+If you find 3MASSIV useful in your research, please use the following BibTeX entry for citation.
+
+```
+@article{gupta20223massiv,
+  title={3MASSIV: Multilingual, Multimodal and Multi-Aspect dataset of Social Media Short Videos},
+  author={Gupta, Vikram and Mittal, Trisha and Mathur, Puneet and Mishra, Vaibhav and Maheshwari, Mayank and Bera, Aniket and Mukherjee, Debdoot and  Manocha, Dinesh},
+  journal={arXiv preprint arXiv:2203.14456},
+  year={2022}
+}
+```
