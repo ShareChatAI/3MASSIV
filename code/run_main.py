@@ -6,33 +6,31 @@ import pytorch_lightning as pl
 from argparse import ArgumentParser
 import numpy as np 
 from tqdm import tqdm
-from classifier import AvtDatamodule
+from classifier import MassivDatamodule, MassivClassifier
 from tester import massiv_test
 from torch.utils.data import DataLoader, random_split
 import pdb
 torch.set_default_tensor_type(torch.DoubleTensor)
-from dataloader import AvtDataLoader, collate_fn
-from classifier import AvtClassifier    
+from dataloader import MassivDataset, collate_fn
 
 def main(args):
-    
     pl.utilities.seed.seed_everything(seed=42)    
-    model = AvtClassifier(args)
-    data_module = AvtDatamodule(args)
+    model = MassivClassifier(args)
+    data_module = MassivDatamodule(args)
     checkpoint_callback = pl.callbacks.ModelCheckpoint(monitor='val_acc1', verbose=True, save_top_k=1, mode='max')
     trainer = pl.Trainer(gpus=-1, max_epochs=args.max_epochs, callbacks= [checkpoint_callback])
     trainer.fit(model, data_module)
 
 def test_model(args):
     
-    test_data = AvtDataLoader(args, args.test_file, split = "test")
+    test_data = MassivDataset(args, args.test_file, split = "test")
         
     test_dataloader = DataLoader(test_data, batch_size = args.batch_size, collate_fn = collate_fn, num_workers = args.num_workers)
     print("Processing test data ==> {}".format(len(test_data)))
 
     model_path = args.model_path
     print("Testing model ==> {}".format(model_path))
-    model = AvtClassifier(args).load_from_checkpoint(model_path)
+    model = MassivClassifier(args).load_from_checkpoint(model_path)
     model.cuda()
     massiv_test(args, model, test_dataloader)
 
@@ -40,7 +38,7 @@ if __name__ == '__main__':
     
     parser = ArgumentParser()
     parser.add_argument('--run', type=str, default='00')
-    parser = AvtClassifier.add_model_specific_args(parser)
+    parser = MassivClassifier.add_model_specific_args(parser)
     parser = pl.Trainer.add_argparse_args(parser)
     # Unimodal and multimodal experiments
     parser.add_argument('--mode', type=str, default="vs", choices=["vs", "vs_as", "vs_2as"])
@@ -49,7 +47,7 @@ if __name__ == '__main__':
     parser.add_argument('--test_file', type=str, default="")
     parser.add_argument('--val_file', type=str, default="")
     parser.add_argument('--map_file_location', type=str, default=None)
-    parser.add_argument('--batch_size', type=int, default=1)
+    parser.add_argument('--batch_size', type=int, default=256)
     parser.add_argument('--num_workers', type=int, default=30)
     parser.add_argument('--num_labels', type=int, default=34, help="number of concept categories")
     parser.add_argument('--video_location', type=str, default=None, help="path to the video features")

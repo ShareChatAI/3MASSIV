@@ -14,7 +14,7 @@ from tqdm import tqdm
 from numpy.linalg import norm
 import glob
 
-class AvtDataLoader(Dataset):
+class MassivDataset(Dataset):
     
     def __init__(self, args, csv, split):
         self.args = args
@@ -33,8 +33,8 @@ class AvtDataLoader(Dataset):
     def __update_data__(self):
         for idx in tqdm(range(len(self.csv))):
             path_str = self.csv['concept'].iloc[idx]
-            tgt_id = self.csv['concept_idx'].iloc[idx]
-            self.post_ids.append(self.csv['post_idx'].iloc[idx])
+            tgt_id = self.csv['concept_id'].iloc[idx]
+            self.post_ids.append(self.csv['post_id'].iloc[idx])
             self.target_ids.append(tgt_id)
 
     def __len__(self):
@@ -87,19 +87,23 @@ class AvtDataLoader(Dataset):
         
         arr = self.__get_resnext_feats__(postId)
         aud = self.__get_audio_feats__(postId, self.audio_feats_paths)
-        
-        if aud is None:
-            return None
-        if arr is None:
-            return None
-        
-        arr = arr/norm(arr)
-        aud = aud/norm(aud)
 
         if self.mode in ["vs_as"]:
+            if aud is None:
+               return None
+            if arr is None:
+                return None
+            arr = arr/norm(arr)
+            aud = aud/norm(aud)
             arr = np.concatenate([arr.reshape(-1),  aud.astype('double')])
         
         elif self.mode in ["vs_2as"]:
+            if aud is None:
+               return None
+            if arr is None:
+                return None
+            arr = arr/norm(arr)
+            aud = aud/norm(aud)
             vgg_audio_feats_paths = self.args.audio_featloc_second
             aud_vgg = self.__get_audio_feats__(postId, vgg_audio_feats_paths)
             if aud_vgg is None:
@@ -108,12 +112,20 @@ class AvtDataLoader(Dataset):
             arr = np.concatenate([arr.reshape(-1),  aud.astype('double'), aud_vgg.astype('double')])
         
         elif self.mode == "vs":
+            if arr is None:
+                return None
+            arr = arr/norm(arr)
             arr = arr.reshape(-1)
         
         elif self.mode == "as":
+            if aud is None:
+               return None
             arr = aud.astype('double').reshape(-1)
         
         elif self.mode == "2as":
+            if aud is None:
+               return None
+            aud = aud/norm(aud)
             vgg_audio_feats_paths = self.audio_feats_paths_second
             aud_vgg = self.__get_audio_feats__(postId, vgg_audio_feats_paths)
             if aud_vgg is None:

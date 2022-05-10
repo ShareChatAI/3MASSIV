@@ -5,7 +5,7 @@ from torch import nn
 import pytorch_lightning as pl
 from torch.utils.data import DataLoader, random_split
 from torch.nn import functional as F
-from dataloader import AvtDataLoader, collate_fn
+from dataloader import MassivDataset, collate_fn
 from torchvision import datasets, transforms
 from argparse import ArgumentParser
 import numpy as np 
@@ -36,7 +36,7 @@ class Accuracy_topk(torchmetrics.metric.Metric):
     def compute(self):
         return self.correct.float() / self.total
 
-class AvtDatamodule(pl.LightningDataModule):
+class MassivDatamodule(pl.LightningDataModule):
 
     def __init__(self, args):
         super().__init__()
@@ -44,8 +44,8 @@ class AvtDatamodule(pl.LightningDataModule):
         
     def setup(self, stage=None):
 
-        self.train_data = AvtDataLoader(self.args, self.args.train_file, split = "train")
-        self.val_data = AvtDataLoader(self.args, self.args.val_file, split = "val")
+        self.train_data = MassivDataset(self.args, self.args.train_file, split = "train")
+        self.val_data = MassivDataset(self.args, self.args.val_file, split = "val")
         
         print("Number of training samples ==> {}".format(len(self.train_data)))
         print("Number of validation samples ==> {}".format(len(self.val_data)))
@@ -56,7 +56,7 @@ class AvtDatamodule(pl.LightningDataModule):
     def val_dataloader(self):
         return DataLoader(self.val_data, batch_size=self.args.batch_size, collate_fn=collate_fn, num_workers=self.args.num_workers)
 
-class AvtClassifier(pl.LightningModule):
+class MassivClassifier(pl.LightningModule):
 
     def __init__(self, args):
 
