@@ -40,7 +40,7 @@ class MassivDataset(Dataset):
     def __len__(self):
         return len(self.post_ids)
 
-    def __get_resnext_feats_old_(self, postId):
+    def __get_resnext_feats_temporal_(self, postId):
         np_path = os.path.join(self.video_feats_paths, str(postId))
         if os.path.isdir(np_path):
             np_path = np_path
@@ -71,6 +71,18 @@ class MassivDataset(Dataset):
         return arr
     
     def __get_audio_feats__(self, postId, audio_feats_paths):
+
+        np_audio_path = os.path.join(audio_feats_paths, str(postId) + '/audio_feats.npy')
+        if not os.path.isfile(np_audio_path):
+            return None
+        aud = np.load(np_audio_path, allow_pickle=True)
+        if len(aud.shape)==0:
+            return None
+        else:
+            aud = aud.squeeze()
+            return aud
+        
+    def __get_audio_feats_temporal__(self, postId, audio_feats_paths):
 
         np_audio_path = os.path.join(audio_feats_paths, str(postId) + '/audio_feats.npy')
         if not os.path.isfile(np_audio_path):
